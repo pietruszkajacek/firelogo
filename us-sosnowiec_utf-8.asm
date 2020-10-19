@@ -147,9 +147,9 @@ dalej:
 	in   al,60h        ;czytaj port klawiatury
 	cmp  al,57         ;spr czy spacja
 	jne  incuj_kat     ;jesli tak to
-	dec  kat_x		   ;zmniejsz kat
+	dec  kat_x         ;zmniejsz kat
 	cmp  kat_x,0       ;spr czy nastapi obrot o 360 stopni
-	jnz  @plus		   ;jesli nie to sprawdz klawisz
+	jnz  @plus	   ;jesli nie to sprawdz klawisz
 	mov  kat_x,360	   ;jesli tak to ustaw kat na 360 (reset)
 	jmp  @plus
 incuj_kat:
@@ -170,14 +170,14 @@ incuj_kat:
 	je  @esc			        
 	sub line_color,1
 @esc:
-	cmp  al,01h		   ;czy nacisniety klawisz ESC
+	cmp  al,01h	   ;czy nacisniety klawisz ESC
 	jne  @mainloop     ;petla i nastepny cykl
 	mov  ax,03h        ;powrot do trybu teksowego
-	int  10h		   ;tryb tekstowy 03h
+	int  10h	   ;tryb tekstowy 03h
 	call clr_bfr_keyb  ;czyszczenie bufora klawiatury
 	call display_txt   ;creditsy
 	mov  ax,4c00h	   ;powrot do wiersza polecen DOS
-	int  21h		   ;
+	int  21h	   ;
 
 ;-------------------------------------------------------------------------------------------------
 ; procedura czysci bufor ekranu
@@ -236,7 +236,7 @@ copy_root PROC
 	push ds
 	pop  es
 	mov  cx,ile_punktow*3 ;kazdy punkt opisany jest przy pomocy 3 wspolrzednych x,y,z
-	rep  movsw        	  ;kazdy punkt to 2 bajty typ word
+	rep  movsw            ;kazdy punkt to 2 bajty typ word
 	ret			
 	ENDP
 ;-------------------------------------------------------------------------------------------------
@@ -259,11 +259,11 @@ wai1:
 ;-------------------------------------------------------------------------------------------------
 rad_sin_cos PROC
 	fild  word ptr kat_x ;laduj do st(0) kat     			                0
-	fldpi			     ;laduj PI               			                0 1
-	fild word ptr _180	 ;laduj 180              			                0 1 2
-	fdivp			     ;zamien st(1) z st(1)/st(0) i zdejmij z wiezcholka 0 1
-	fmulp                ;mnoz i zdejmij					                0
-	fsincos              ;liczy sin i cos				                    0 1
+	fldpi		     ;laduj PI               			                0 1
+	fild word ptr _180   ;laduj 180              			                0 1 2
+	fdivp		     ;zamien st(1) z st(1)/st(0) i zdejmij z wiezcholka 0 1
+	fmulp                ;mnoz i zdejmij					        0
+	fsincos              ;liczy sin i cos				                0 1
 	ret
 	ENDP
 ;--------------------------------------------------------------------------------------------------
@@ -367,7 +367,7 @@ next_point_y:
 ;		Zr=Z*cosa-Y*sina
 ;-------------------------------------------------------------------------------------------------
 root_x PROC
-	lea   si,root		  ;offset tab. z punktami zrodlowymi
+	lea   si,root	      ;offset tab. z punktami zrodlowymi
 	lea   di,root         ;offset tab. na punkty po przeliczeniach (ta sama tablica)
 	mov   cx,ile_punktow
 next_point_x:
@@ -439,7 +439,7 @@ draw_bufor PROC
 	lea si,ekran
 	mov cx,ile_linii
 rysuj:
-	mov bx,es:[di]		;laduj pierwszy lacznik
+	mov bx,es:[di]	    ;laduj pierwszy lacznik
 	mov bp,es:[di+2]    ;laduj drugi lacznik
 	mov ax,ds:[si+bx]   ;laduj x1 do ax
 	mov dx,ds:[si+bx+2] ;laduj y1 do dx
@@ -470,7 +470,7 @@ przelicz_lacz PROC
 	mov cx,ile_linii
 	shl cx,1
 next_wsp:
-	mov ax,es:[di]   	    ;es, ds to "samo"
+	mov ax,es:[di]   	 ;es, ds to "samo"
 	shl ax,1
 	shl ax,1
 	stosw
@@ -500,19 +500,19 @@ paleta PROC
 	mov cl,0
 	mov bx, offset PaletaKolorow
 ustaw:
-	mov dx,03c8h                 ;nr koloru ktory bedziemy ustawiac do 03c8h
+	mov dx,03c8h                  ;nr koloru ktory bedziemy ustawiac do 03c8h
 	mov al,cl
-	out dx,al                    ;zapis nr koloru ktory ustawiac bedziemy
-	inc dx                       ;do 03c9h po kolei r g b
-	mov al,[bx]                  ;pobierz r
+	out dx,al                     ;zapis nr koloru ktory ustawiac bedziemy
+	inc dx                        ;do 03c9h po kolei r g b
+	mov al,[bx]                   ;pobierz r
 	shr al,2
-	out dx,al                    ;r -> 03c9h
-	mov al,[bx+1]                ;pobierz g
+	out dx,al                     ;r -> 03c9h
+	mov al,[bx+1]                 ;pobierz g
 	shr al,2
-	out dx,al                    ;g -> 03c9h
-	mov al,[bx+2]                ;pobierz b
+	out dx,al                     ;g -> 03c9h
+	mov al,[bx+2]                 ;pobierz b
 	shr al,2
-	out dx,al                    ;b -> 03c9h
+	out dx,al                     ;b -> 03c9h
 	add bx,03h
 	inc cl
 	;cmp cl,0
@@ -580,87 +580,87 @@ random PROC
 ; procedura $D016, scroll tekstu
 ;------------------------------------------------------------------------------
 scroll PROC
-    ;dec lwait
+        ;dec lwait
 	;jnz @scexit
 	;mov lwait,1
 	                
-    push ds                 ;seg. danych na stos
-    mov ax,seg Bufor_Video  ;adres seg bufora do ax
+        push ds                 ;seg. danych na stos
+        mov ax,seg Bufor_Video  ;adres seg bufora do ax
 	mov es,ax               ;es wsk. na bufor
 	mov ds,ax               ;ds wsk. na bufor
 	mov si,320*scroll_y+1   ;wsk. na drugi piksel w linii (docelowy)
-    mov di,320*scroll_y     ;wsk. na pierwszy piksel w linii (zrodlowy)
-    mov al,8                ;ile linii do rollowania
+        mov di,320*scroll_y     ;wsk. na pierwszy piksel w linii (zrodlowy)
+        mov al,8                ;ile linii do rollowania
 @rollx8:
-    mov cx,319              ;dlugosc linii w pikselach, bez pierwszego
-    rep movsb               ;rolluj jedna linie, pierwszy pixel jest nadpisywany drugim, drugi trzecim itd.
-    add di,1                ;przejscie do nastepnej linii (cel)
-    add si,1                ;przejscie do nastepnej linii (zrodlo)
-    dec al                  ;zmniejsz licznik linii
-    jnz @rollx8             ;rolluj kolejna linie 
-    pop ds                  ;przywroc seg. danych ze stosu
+        mov cx,319              ;dlugosc linii w pikselach, bez pierwszego
+        rep movsb               ;rolluj jedna linie, pierwszy pixel jest nadpisywany drugim, drugi trzecim itd.
+        add di,1                ;przejscie do nastepnej linii (cel)
+        add si,1                ;przejscie do nastepnej linii (zrodlo)
+        dec al                  ;zmniejsz licznik linii
+        jnz @rollx8             ;rolluj kolejna linie 
+        pop ds                  ;przywroc seg. danych ze stosu
 @pobierz_litere:
-    mov bx,offset tekst     ;adres pierwszego znaku tekstu
-    mov si,wsk_tekstu       ;nr litery 
-    mov byte ptr al,[bx+si] ;pobierz litere
+        mov bx,offset tekst     ;adres pierwszego znaku tekstu
+        mov si,wsk_tekstu       ;nr litery 
+        mov byte ptr al,[bx+si] ;pobierz litere
                        
-    cmp al,0ffh             ;czy to koniec tekstu
-    jne @nie_ost_znak       ;jak nie to skocz do etykiety nie_ost_znak
-    mov wsk_tekstu,0        ;jak tak to zeruj wsk tekstu, wskazuje teraz na pierwsza litere tekstu
-    jmp @pobierz_litere     ;i pobierz ten znak
+        cmp al,0ffh             ;czy to koniec tekstu
+        jne @nie_ost_znak       ;jak nie to skocz do etykiety nie_ost_znak
+        mov wsk_tekstu,0        ;jak tak to zeruj wsk tekstu, wskazuje teraz na pierwsza litere tekstu
+        jmp @pobierz_litere     ;i pobierz ten znak
 @nie_ost_znak:        	                
-    cmp al,' '              ;czy to spacja
-    jne @nie_spacja         ;jak nie to skocz do przemapowywania ascii na moj format fontow
-    cmp poz_fonta,spacja    ;jesli tak to spr. czy zostala cala wyrysowana
-    jne @spacja             ;jesli nie to dalej zwiekszaj odstep az do szerokosci spacja
-    jmp @sc4                ;w przeciwnym przypadku nastepna litera tekstu
+        cmp al,' '              ;czy to spacja
+        jne @nie_spacja         ;jak nie to skocz do przemapowywania ascii na moj format fontow
+        cmp poz_fonta,spacja    ;jesli tak to spr. czy zostala cala wyrysowana
+        jne @spacja             ;jesli nie to dalej zwiekszaj odstep az do szerokosci spacja
+        jmp @sc4                ;w przeciwnym przypadku nastepna litera tekstu
 @nie_spacja:
-    mov bx,offset przemapow ;offset tab. przem. do bx
-    xor ah,ah               
-    add bx,ax               ;dodaj ascii litery do offsetu tab. przemap.
-    sub byte ptr ax,[bx]    ;wylicz nowy kod litery odp. mojemu formatowi.
+        mov bx,offset przemapow ;offset tab. przem. do bx
+        xor ah,ah               
+        add bx,ax               ;dodaj ascii litery do offsetu tab. przemap.
+        sub byte ptr ax,[bx]    ;wylicz nowy kod litery odp. mojemu formatowi.
 	                        ;Od kodu ascii litery odejmowana jest wartosc pobrana z tab. przemap.
 	                        ;dla danej wartosci ascii. W AX nowy indeks znaku.
 	                
-    ;mov ah,8               ;fonty 8x8, by uzyskac dostep do danego znaku nalezy pomnozyc
-    ;mul ah                 ;przemapowany wczesniej kod znaku przez 8
-    xor ah,ah
-    shl ax,1
-    shl ax,1
-    shl ax,1
-    mov bx,offset fonty     ;do bx offset tablicy z fontami
-    add bx,ax               ;dodaj przesniecie obliczone wczesniej
-    add bl,poz_fonta        ;dodaj biezaca pozycje z ktorej kopiujemy kolumne danego znaku
-    mov di,320*scroll_y+319 ;policz miejsce w ktore bedziemy kopiowali biezaca kolumne
+        ;mov ah,8               ;fonty 8x8, by uzyskac dostep do danego znaku nalezy pomnozyc
+        ;mul ah                 ;przemapowany wczesniej kod znaku przez 8
+        xor ah,ah
+        shl ax,1
+        shl ax,1
+        shl ax,1
+        mov bx,offset fonty     ;do bx offset tablicy z fontami
+        add bx,ax               ;dodaj przesniecie obliczone wczesniej
+        add bl,poz_fonta        ;dodaj biezaca pozycje z ktorej kopiujemy kolumne danego znaku
+        mov di,320*scroll_y+319 ;policz miejsce w ktore bedziemy kopiowali biezaca kolumne
 	                        ;szer. ekranu 320 pomn. przez miejsce od ktorego rysujemy scroll plus
 	                        ;319 bo rysujemy w ostatnim pixelu szerokosci ekranu
 	                
-    mov cl,8                ;8 pikseli do skopiowania 
-    mov ah,0
+        mov cl,8                ;8 pikseli do skopiowania 
+        mov ah,0
 @sc2:
-    mov byte ptr al,[bx]	;pobierz pixel z tab fontow
-    mov byte ptr es:[di],al ;zapisz do bufora
-    add di,320              ;nastepny piksel nastepny wiersz w buforze
-    add bx,640              ;nastepny wiersz w tablicy znakow 
-    cmp al,0                ;spraw. czy byl piksel
-    je  @sc3                ;jak nie to nie zapalaj flagi 
+        mov byte ptr al,[bx]	;pobierz pixel z tab fontow
+        mov byte ptr es:[di],al ;zapisz do bufora
+        add di,320              ;nastepny piksel nastepny wiersz w buforze
+        add bx,640              ;nastepny wiersz w tablicy znakow 
+        cmp al,0                ;spraw. czy byl piksel
+        je  @sc3                ;jak nie to nie zapalaj flagi 
 	                
-    mov ah,1                ;jak tak to zapal
+        mov ah,1                ;jak tak to zapal
 @sc3:
-    loop @sc2               ;kopiuj kolejny piksel
+        loop @sc2               ;kopiuj kolejny piksel
 	                
-    cmp ah,1                ;jak skopiowalismy przynajmniej jeden piksel to nie zmieniaj na kolejny znak 
+        cmp ah,1                ;jak skopiowalismy przynajmniej jeden piksel to nie zmieniaj na kolejny znak 
 	                        ;az do natrafienia calej pustej kolumny
-    jne @sc4
+        jne @sc4
 @spacja:                        
-    inc poz_fonta           ;kolejna kolumna wewn. znaku
-    jmp @scexit
+        inc poz_fonta           ;kolejna kolumna wewn. znaku
+        jmp @scexit
 @sc4:
-    mov poz_fonta,0         ;biezaca kopiowana kolumna byla pusta, czyli nastepny znak
-    inc wsk_tekstu
+        mov poz_fonta,0         ;biezaca kopiowana kolumna byla pusta, czyli nastepny znak
+        inc wsk_tekstu
 @scexit:
-    ret
-    ENDP
+        ret
+        ENDP
 ;-------------------------------------------------------------------------------------------------
   include linia.asm
 ;-------------------------------------------------------------------------------------------------
