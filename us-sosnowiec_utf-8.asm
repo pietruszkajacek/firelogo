@@ -58,7 +58,7 @@ zv1	dd -25600 ;natezenie perspektywy (zv*256)
 ;z0	dw 0
 
 ;katy
-kat_x  dw 0
+kat_x dw 0
 ;kat_y dw 0
 ;kat_z dw 0
 
@@ -67,8 +67,8 @@ _180 dw 180
 _256 dw 256
 
 ;tablice
-ekran	dw ile_punktow dup(0,0)   ;tablica po wszystkich przeliczeniach
-root	dw ile_punktow dup(0,0,0) ;tablica na wspolrzedne
+ekran dw ile_punktow dup(0,0)   ;tablica po wszystkich przeliczeniach
+root  dw ile_punktow dup(0,0,0) ;tablica na wspolrzedne
 
 credits db "Code, calculated by Jacek 'Quasar' Pietruszka",13,10
         db "Idea from 'CO I JAK W ASSEMBLERZE' by Grzegorz Michalek",13,10,13,10,'$'
