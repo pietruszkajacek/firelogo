@@ -10,9 +10,8 @@
 ; Jacek 'Quasar' Pietruszka - 2005.06.12.
 ; 
 ; Kontakt: 
-; jpsiemce@interia.pl, jpsiemce@o2.pl
+; pietruszka.jacek@gmail.com
 ;
-; W wypadku dostrzezenia jakichkolwiek bledow badz nieprawidlowego dzialania programu prosze o kontakt.
 ;---------------------------------------------------------------------------------------------------------
 
 MODEL small
